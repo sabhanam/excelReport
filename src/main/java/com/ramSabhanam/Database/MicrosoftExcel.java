@@ -1,6 +1,6 @@
 package com.ramSabhanam.Database;
 
-import static com.ramSabhanam.utils.ConfigurationUtil.getBundle;
+import static com.ramSabhanam.configuration.Configuration.getBundle;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -20,14 +20,30 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import com.ramSabhanam.utils.DateUtil;
+import com.ramSabhanam.date_util.*;
 
+/**
+ * Microsoft xlsx & xls related utility to flush report as Excel file
+ * 
+ * @author RamSabhanam
+ *
+ */
 public class MicrosoftExcel implements IDatabase{
 
 	private Workbook workbook = null;
 	private String workbookLocation = "";
 	Sheet sheet = null;
 	
+	/**
+	 * 
+	 * Creates the file, in case missing.
+	 * Creation of default columns only happens first time.
+	 * However, creation of columns which are added at runtime happens always.
+	 * 
+	 * @param databaseType : xls or xlsx
+	 * @param databaseLocation : Location of file
+	 * 
+	 */
 	public MicrosoftExcel(String databaseType, String databaseLocation) {
 		
 		workbookLocation = databaseLocation + "." + databaseType;
@@ -40,6 +56,9 @@ public class MicrosoftExcel implements IDatabase{
 		
 	}
 	
+	/**
+	 * creation of Excel file
+	 */
 	@Override
 	public void createDatabase(String databaseType, String databaseLocation) {
 		
@@ -55,6 +74,9 @@ public class MicrosoftExcel implements IDatabase{
 		
 	}
 
+	/**
+	 * Verification of Excel file, exists or not
+	 */
 	@Override
 	public boolean verifyDatabase(String databaseType, String databaseLocation) {
 		
@@ -80,6 +102,11 @@ public class MicrosoftExcel implements IDatabase{
 		
 	}
 	
+	/**
+	 * Get columns which are default
+	 * 
+	 * @return ArrayList<String> : Column Names
+	 */
 	private ArrayList<String> getColumnNames() {
 		
 		ArrayList<String> columnNames = new ArrayList<String>();
@@ -92,6 +119,12 @@ public class MicrosoftExcel implements IDatabase{
 		
 	}
 	
+	/**
+	 * 
+	 * Create the columns if they are unavailable
+	 * 
+	 * @param data
+	 */
 	private void makeAllColumnsAvailable(Map<String,String> data) {
 		
 		Row row = null;
@@ -146,6 +179,14 @@ public class MicrosoftExcel implements IDatabase{
         
 	}
 	
+	/**
+	 * Creation of cell
+	 * 
+	 * @param row
+	 * @param incrementor
+	 * @param columnName
+	 * @return
+	 */
 	private int createColumnCell(Row row, int incrementor, String columnName) {
 		Cell cell = row.createCell(incrementor);
         cell.setCellStyle(getHeaderStyling());
@@ -154,6 +195,11 @@ public class MicrosoftExcel implements IDatabase{
         return incrementor; 
 	}
 
+	/**
+	 * Header cell styling
+	 * 
+	 * @return
+	 */
 	private CellStyle getHeaderStyling() {
 		
 		CellStyle style = workbook.createCellStyle();
@@ -170,6 +216,11 @@ public class MicrosoftExcel implements IDatabase{
 		
 	}
 	
+	/**
+	 * Row cell styling
+	 * 
+	 * @return
+	 */
 	private CellStyle getRowStyling() {
 		CellStyle style1 = workbook.createCellStyle();
 		style1.setBorderBottom(XSSFCellStyle.BORDER_THIN);
@@ -179,6 +230,11 @@ public class MicrosoftExcel implements IDatabase{
 		return style1;
 	}
 	
+	/**
+	 * Passed cell styling
+	 * 
+	 * @return
+	 */
 	private CellStyle getPassedCellStyling() {
 		CellStyle style = workbook.createCellStyle();
 		style.setFillForegroundColor(IndexedColors.BRIGHT_GREEN.getIndex());
@@ -190,6 +246,11 @@ public class MicrosoftExcel implements IDatabase{
 		return style;
 	}
 	
+	/**
+	 * Failed cell styling
+	 * 
+	 * @return
+	 */
 	private CellStyle getFailedCellStyling() {
 		CellStyle style = workbook.createCellStyle();
 		style.setFillForegroundColor(IndexedColors.RED.getIndex());
@@ -201,6 +262,11 @@ public class MicrosoftExcel implements IDatabase{
 		return style;
 	}
 
+	/**
+	 * Insert row into excel
+	 * 
+	 * @param data
+	 */
 	private void insertExecutionRow(Map<String, String> data) {
 		
 		ArrayList<String> columnNames = new ArrayList<>();
@@ -264,6 +330,10 @@ public class MicrosoftExcel implements IDatabase{
 		
 	}
 
+	/**
+	 * Insert data into excel
+	 * 
+	 */
 	@Override
 	public void flushExcel(Map<String, String> data) {
 		
@@ -273,6 +343,9 @@ public class MicrosoftExcel implements IDatabase{
 		
 	}
 
+	/**
+	 * Insert multiple data into excel
+	 */
 	@Override
 	public void flushExcel(List<Map<String, String>> data) {
 		
@@ -286,6 +359,9 @@ public class MicrosoftExcel implements IDatabase{
 		
 	}
 
+	/**
+	 * Save file at last
+	 */
 	@Override
 	public void dispose() {
 		

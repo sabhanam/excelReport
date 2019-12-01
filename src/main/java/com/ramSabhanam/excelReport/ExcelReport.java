@@ -1,6 +1,5 @@
 package com.ramSabhanam.excelReport;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -11,23 +10,18 @@ public class ExcelReport {
 
 	IDatabase database = null;
 	
-	public static void main(String... args) {
-		
-		Map<String,String> data = new HashMap<String,String>();
-		data.put("Column1", "asdas");
-		data.put("Sairam", "asd");
-		data.put("Thirumala", "asx");
-		data.put("ExecutionStatus", "PASSED");
-		data.put("qwsd", "sdwd");
-		
-		
-		ExcelReport excelReport = new ExcelReport("xlsx","/Users/sunnysabhanam/Desktop/Report");
-		excelReport.flushExcel(data);
-		excelReport.dispose();
-		
-	}
+	public static ExcelReport reporter() { return ExcelReport.localProps.get(); }
+
 	
-	public ExcelReport(String databaseType, String databaseLocation) {
+	private static InheritableThreadLocal<ExcelReport> localProps = new InheritableThreadLocal<ExcelReport>(){
+		@Override
+		protected ExcelReport initialValue(){
+			ExcelReport excelReport = new ExcelReport();
+			return excelReport;
+		}
+	};
+	
+	public void setDatabase(String databaseType, String databaseLocation) {
 		
 		if(databaseType.equals("xlsx") || databaseType.equals("xls")) {
 			
@@ -40,6 +34,7 @@ public class ExcelReport {
 	public void flushExcel(Map<String, String> data) {
 		
 		database.flushExcel(data);
+		dispose();
 		
 	}
 
