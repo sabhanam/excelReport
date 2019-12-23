@@ -34,7 +34,6 @@ public class ExcelReport {
 	public void flushExcel(Map<String, String> data) {
 		
 		database.flushExcel(data);
-		dispose();
 		
 	}
 

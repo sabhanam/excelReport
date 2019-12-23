@@ -12,7 +12,14 @@ public class Listener implements ITestListener{
 
 	@Override
 	public void onTestStart(ITestResult result) {
-		
+		/**
+		 * #############################################
+		 * 
+		 * On start of each test, adding Test Case Name
+		 * 
+		 * #############################################
+		 */
+		data().put("TestCaseName", result.getName());
 	}
 
 	@Override
@@ -25,6 +32,7 @@ public class Listener implements ITestListener{
 		 * 
 		 * #############################################
 		 */
+		data().put("ExecutionStatus", "PASSED");
 		reporter().flushExcel(data());
 		data().clear();
 	}
@@ -39,6 +47,7 @@ public class Listener implements ITestListener{
 		 * 
 		 * #############################################
 		 */
+		data().put("ExecutionStatus", "FAILED");
 		reporter().flushExcel(data());
 		data().clear();
 	}
@@ -67,7 +76,14 @@ public class Listener implements ITestListener{
 
 	@Override
 	public void onFinish(ITestContext context) {
-
+		/**
+		 * #############################################
+		 * 
+		 * On complete
+		 * 
+		 * #############################################
+		 */
+		reporter().dispose();
 	}
 
 }

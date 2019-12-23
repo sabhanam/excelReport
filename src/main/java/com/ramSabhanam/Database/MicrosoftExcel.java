@@ -5,6 +5,7 @@ import static com.ramSabhanam.configuration.Configuration.getBundle;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -31,8 +32,9 @@ import com.ramSabhanam.date_util.*;
 public class MicrosoftExcel implements IDatabase{
 
 	private Workbook workbook = null;
-	private String workbookLocation = "";
 	Sheet sheet = null;
+	private String dbLocation = "";
+	private String dbType = "";
 	
 	/**
 	 * 
@@ -46,7 +48,8 @@ public class MicrosoftExcel implements IDatabase{
 	 */
 	public MicrosoftExcel(String databaseType, String databaseLocation) {
 		
-		workbookLocation = databaseLocation + "." + databaseType;
+		dbLocation = databaseLocation;
+		dbType = databaseType;
 		
 		if(!verifyDatabase(databaseType, databaseLocation)) {
 			
@@ -367,14 +370,20 @@ public class MicrosoftExcel implements IDatabase{
 		
 		try {
 			
-			FileOutputStream outFile =new FileOutputStream(workbookLocation);
+			FileOutputStream outFile =new FileOutputStream(dbLocation + "." + dbType);
 	        workbook.write(outFile);
 	        workbook.close();
 	        
 		}catch (Exception e) {
 			
-			e.printStackTrace();
-			
+			try {
+				
+				FileOutputStream outFile =new FileOutputStream(dbLocation + "_Copy." + dbType);
+				workbook.write(outFile);
+				workbook.close();
+				
+	        } catch (IOException e1) { }
+	        
 		}
         
 	}

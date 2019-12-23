@@ -9,11 +9,11 @@ public class ExcelReportTests {
 	@Test
 	public void test01() {
 		
-		data().put("Column1", "asdas");
-		data().put("Sairam", "asd");
-		data().put("Thirumala", "asx");
-		data().put("ExecutionStatus", "PASSED");
-		data().put("qwsd", "sdwd");
+		data().put("Column1", "data1");
+		data().put("Column2", "data2");
+		data().put("Column3", "data3");
+		data().put("Name", "sree");
+		data().put("Address", "Street1");
 		
 	}
 	
